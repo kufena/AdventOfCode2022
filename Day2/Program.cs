@@ -2,9 +2,9 @@
 Console.WriteLine("Hello, World!");
 
 var lines = File.ReadAllLines(args[0]);
-//long score = Part1(lines);
-long score = Part2(lines);
-Console.WriteLine($"Score is {score}");
+long score = Part1(lines);
+long score2 = Part2(lines);
+Console.WriteLine($"Score is {score2}");
 
 long Part1(string[]? lines) {
 
