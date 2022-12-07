@@ -1,4 +1,13 @@
-﻿## --- Day 7: No Space Left On Device ---
+﻿## Note on solution.
+
+I've implemented two solutions here.  The first - the one I used to win the stars - builds a directory/file model and uses some
+slightly shonky methods on those objects to filter/total the directories.
+
+But I realised that, if you assume that all the data for a directory is together, before you cd .. from it, then you can just parse
+the file and follow the instructions to get the directory sizes.  Not bothered about the file sizes once we've passed the file.
+Then, the two results are just filters/sums on the directories and their sizes.  Voila!
+
+## --- Day 7: No Space Left On Device ---
 
 You can hear birds chirping and raindrops hitting leaves as the expedition proceeds. Occasionally, you can even hear much louder sounds in the distance; how big do the animals get out here, anyway?
 
