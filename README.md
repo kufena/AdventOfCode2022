@@ -11,3 +11,6 @@ I take no responsibility if you run this code and something awful happens - chec
 In each day, I have taken the markup from the description and copied it here.  This is probably in breach
 of copyright, but none of this is owned by me - it all comes from the brilliant [Eric Wastl](https://twitter.com/ericwastl),
 and the [Advent of Code 2022 website](https://adventofcode.com/2022).
+
+Included in the markdown are my answers for the given input.  I have always assumed everyone gets a unique puzzle input,
+although I am not sure about that.
