@@ -106,23 +106,15 @@ bool squareOn((int, int) a, (int, int) b)
     (int hx, int hy) = h;
     (int tx, int ty) = t;
 
+    //
+    // There's an assumption here that the difference between the two points
+    // will not be more than two away.  That is, I only ever move the head by
+    // one square in one of the directions up,down,left or right, and so the
+    // tail will be at most two away.
+    // This way, just using the sign of the difference gives us the move for
+    // the tail, assuming sign returns 1 for +ive, -1 for -ve and 0 for 0.
+    //
     return (tx + Math.Sign(hx - tx), ty + Math.Sign(hy - ty));
-    /*
-    if (squareOn(h, t)) // move in direction to meet h
-    {
-        if (hx == tx) // move in y
-        {
-            int move = Math.Sign(hy - ty);
-            return (tx, ty + move);
-        }
-        else // move in x
-        {
-        }
-    }
-    else // move diagonally.
-    {
-    }
-    */
 }
 
 
