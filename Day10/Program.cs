@@ -62,14 +62,14 @@ long IncCycle(State s)
 void OutputDotOrDash(State st)
 {
     long pos = st.cycle % 40;
+    if ((st.cycle > 0) && st.cycle % 40 == 0)
+        Console.WriteLine();
     if (st.registerX >= (pos-1) && st.registerX <= (pos+1)) //st.cycle >= st.registerX - 1 && st.cycle <= st.registerX + 1)
     {
         Console.Write("#");
     }
     else
         Console.Write(".");
-    if (st.cycle % 40 == 0)
-        Console.WriteLine();
 }
 
 record State
