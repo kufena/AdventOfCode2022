@@ -80,6 +80,12 @@ void Part1(Node[][] grid, Node start, Node end)
         if (n.dist < smol.dist)
             smol = n;
     }
+    if (smol.dist == int.MaxValue)
+        throw new Exception("dist not not oh yeah!");
+    nodes.Remove(smol);
+    return (nodes, smol);
+
+    /*
     List<Node> rem = new List<Node>();
     foreach (var n in nodes)
     {
@@ -90,6 +96,7 @@ void Part1(Node[][] grid, Node start, Node end)
         throw new Exception("No can do thank you very much!");
 
     return (rem, smol);
+    */
 }
 
 static void ParseFiles(string[] lines, int Y, int X, out List<(int, int)> starts, out Node end, out Node[][] grid)
