@@ -4,8 +4,10 @@ using Microsoft.VisualBasic;
 Console.WriteLine("Hello, World!");
 
 var lines = File.ReadAllLines(args[0]);
-int xl = 500;
-int xr = 500;
+
+// No physical grid, as an array, so set the extents as big as we need.
+int xl = 0; // 500;
+int xr = 1000; // 500;
 int deep = 0;
 
 foreach (var line in lines)
@@ -14,8 +16,6 @@ foreach (var line in lines)
     for (int i = 0; i < arr.Length; i++)
     {
         (int x, int y) = arr[i];
-        if (x < xl) xl = x;
-        if (x > xr) xr = x;
         if (y > deep) deep = y;
     }
 }
@@ -43,18 +43,15 @@ void Part1(string[] lines)
     int count = 0;
     while (MapNewSand())
     {
-        //RenderGrid();
-        //Console.WriteLine();
         count++;
     }
 
     Console.WriteLine($"We managed {count} sand grains.");
 }
 
-/*
+
 void Part2(string[] lines)
 {
-
     // map rock.
     for (int i = 0; i < lines.Length; i++)
     {
@@ -65,29 +62,32 @@ void Part2(string[] lines)
         }
     }
 
-    // add floor.
-    for (int i = 0; i < grid[0].Length; i++)
+    // For part 2, we add two extra layers, and make it rock hard.
+    // I think the constraint here is if deep > 500 - then the triangle formed by
+    // falling sand will be more than 500 wide, and we'll get negative x values.
+    deep += 2;
+    for (int i = 0; i < 1001; i++)
     {
-        grid[deep][i] = 1;
+        grid.Add((deep, i));
     }
 
     // flow sand.
     int count = 0;
     while (MapNewSand())
     {
-        //RenderGrid();
-        //Console.WriteLine();
         count++;
 
-        if (grid[0][500 - xl] == 2) // snow at the point.
+        if (grid.Contains((0, 500))) // [0][500] == 2) // snow at the point.
             break;
 
     }
 
     Console.WriteLine($"We managed {count} sand grains.");
 }
-*/
 
+// A part1 sand mapping function which returns a bool.
+//   - True if it lands a bit of sand on solid ground
+//   - False if sand falls below the deepest part of the grid.
 bool MapNewSand()
 {
     (int x, int y) = (500 - xl, 0);
@@ -131,30 +131,7 @@ bool MapNewSand()
     return false; // we've fallen out the bottom.
 }
 
-/*
-void RenderGrid()
-{
-    for (int i = deep; i >= 0; i--)
-    {
-        for (int j = 0; j < grid[0].Length; j++)
-        {
-            if (i == 0 && j == (500 - xl))
-            {
-                Console.Write("+");
-                continue;
-            }
-            if (grid[i][j] == 0)
-                Console.Write(".");
-            if (grid[i][j] == 1)
-                Console.Write("#");
-            if (grid[i][j] == 2)
-                Console.Write("o");
-        }
-        Console.WriteLine();
-    }
-}
-*/
-
+// Add rock bits to the grid.
 void MapPoints((int, int) value1, (int, int) value2)
 {
     (int x1, int y1) = value1;

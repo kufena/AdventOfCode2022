@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Day14-take2": {
+      "commandName": "Project",
+      "commandLineArgs": "../../../test.txt"
+    }
+  }
+}
