@@ -86,6 +86,7 @@ static void Part1WithLinks(string[] lines)
                 bun = bun.fwd;
             }
 
+            /*
             // insert after current bun.
             // but, if the node we're moving is already after the current bun, then no
             // need to do anything.  This rarely if ever is true, fortunately.
@@ -95,6 +96,7 @@ static void Part1WithLinks(string[] lines)
                 // we're inserting it after a thing but it's already us.
                 continue;
             }
+            */
 
             // remove inorder[i] from the list.
             inorder[i].bck.fwd = inorder[i].fwd;
@@ -114,6 +116,7 @@ static void Part1WithLinks(string[] lines)
             {
                 bun = bun.bck;
             }
+            /*
             // insert before current.
             // again, check to ensure the file-order node we're moving isn't alreayd there.
             if (Object.ReferenceEquals(bun.bck, inorder[i]))
@@ -122,6 +125,7 @@ static void Part1WithLinks(string[] lines)
                 // we're inserting it after a thing but it's already us.
                 continue;
             }
+            */
 
             // remove inorder[i] from the list.
             inorder[i].bck.fwd = inorder[i].fwd;
