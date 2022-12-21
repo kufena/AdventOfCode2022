@@ -16,6 +16,9 @@ static void Part1WithLinks(string[] lines)
 
     Node fst = null;
     Node lst = null;
+
+    // Build the nodes, double linking back/forward between nodes, in order.
+    // The array holds the nodes as they were read from the file.
     Node current = null;
 
     for (int i = 0; i < lines.Length; i++)
@@ -36,9 +39,36 @@ static void Part1WithLinks(string[] lines)
     fst.bck = lst;
     lst.fwd = fst;
 
+    // Lets just double check that the order we have in the array - ie from the file,
+    // is the same as following the linked list fowards.  Perhaps we should do this backwards?
+    var check = fst;
     for (int i = 0; i < inorder.Length; i++)
     {
+        if (check.num != inorder[i].num)
+        {
+            Console.WriteLine($"out of order at {i} - {check.num} vs {inorder[i].num}");
+        }
+        check = check.fwd;
+    }
+
+    // OK, we'll check backwards too.
+    check = lst;
+    for (int i = inorder.Length - 1; i >= 0; i--)
+    {
+        if (check.num != inorder[i].num)
+        {
+            Console.WriteLine($"out of order (backwards) at {i} - {check.num} vs {inorder[i].num}");
+        }
+        check = check.bck;
+    }
+
+    // Now loop over the nodes as they are, in file order.
+    for (int i = 0; i < inorder.Length; i++)
+    {
+        // bun is the current node, a la file order.
         Node bun = inorder[i];
+
+        // position will be how many moves we have to make.
         int position = 0;
 
         if (bun.num > 0)
@@ -47,60 +77,56 @@ static void Part1WithLinks(string[] lines)
             position = bun.num % inorder.Length; // -(Math.Abs(bun.num) % inorder.Length);
 
         if (position == 0) continue;
-        //if (position < 0) position = inorder.Length + position - 1;
 
         if (position > 0)
         {
+            // move forward by 'position' steps.
             for (int j = 0; j < position; j++)
             {
                 bun = bun.fwd;
             }
-            var tst = inorder[i];
-            for (int j = 0; j < (position % inorder.Length); j++)
-                tst = tst.fwd;
 
-            if (bun.num != tst.num)
-            {
-                Console.WriteLine($"Comparing {inorder[i].num} fwd to {inorder[i].num % inorder.Length} gives different nums.");
-                Console.WriteLine($"{bun.num} and {tst.num} at line {i}");
-                Console.ReadLine();
-            }
-
-            // insert after current.
+            // insert after current bun.
+            // but, if the node we're moving is already after the current bun, then no
+            // need to do anything.  This rarely if ever is true, fortunately.
             if (Object.ReferenceEquals(bun.fwd, inorder[i]))
             {
                 Console.WriteLine($"Got that funny ordering thing where we do nothing! Positive num {inorder[i].num}");
                 // we're inserting it after a thing but it's already us.
                 continue;
             }
+
             // remove inorder[i] from the list.
             inorder[i].bck.fwd = inorder[i].fwd;
             inorder[i].fwd.bck = inorder[i].bck;
+
             // now insert after current.
             var oldfwd = bun.fwd;
             bun.fwd = inorder[i];
             inorder[i].bck = bun;
             oldfwd.bck = inorder[i];
-            inorder[i].fwd = oldfwd;
+            inorder[i].fwd = oldfwd; 
         }
         else if (position < 0)
         {
-            //Console.WriteLine("Not reachable!");
+            // we're moving backwards so go position steps backwards.
             for (int j = position; j < 0; j++)
             {
                 bun = bun.bck;
             }
             // insert before current.
+            // again, check to ensure the file-order node we're moving isn't alreayd there.
             if (Object.ReferenceEquals(bun.bck, inorder[i]))
             {
                 Console.WriteLine($"Got that funny ordering thing where we do nothing! Negative num {inorder[i].num}");
                 // we're inserting it after a thing but it's already us.
                 continue;
             }
+
             // remove inorder[i] from the list.
             inorder[i].bck.fwd = inorder[i].fwd;
             inorder[i].fwd.bck = inorder[i].bck;
-            // now insert after current.
+            // now insert before current.
             var oldbck = bun.bck;
             bun.bck = inorder[i];
             inorder[i].fwd = bun;
