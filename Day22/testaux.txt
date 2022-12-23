@@ -1,0 +1,24 @@
+﻿1 T -> 2 T L L
+1 R -> 6 R L L
+1 B -> 4 T S
+1 L -> 3 T R
+2 T -> 1 T L L
+2 R -> 3 L S
+2 B -> 5 B L L
+2 L -> 6 B L
+3 L -> 2 R S
+3 T -> 1 L L
+3 R -> 4 L S
+3 B -> 5 L R
+4 L -> 3 R S
+4 T -> 1 B S
+4 R -> 6 T L
+4 B -> 5 T S
+5 L -> 3 B R
+5 T -> 4 B S
+5 R -> 6 L S
+5 B -> 2 B L L
+6 L -> 5 R S
+6 T -> 4 R R
+6 R -> 1 R L L
+6 B -> 2 L R
