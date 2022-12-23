@@ -109,7 +109,7 @@ void Part2Hard(string[] lines, int dim) {
     (int, int) whereami = (0, horizontalExtents[0].Item1); // 0'th row, leftextent exent of that row - assume it's a dot.
     char facing = 'R';
     int face = facegrid[whereami.Item1][whereami.Item2];
-
+    int dimsum = dim - 1; // to add or take away from face extermeties.
     var instructions = lines[lines.Length - 1].ToCharArray();
     int pos = 0;
     while (true)
@@ -136,7 +136,7 @@ void Part2Hard(string[] lines, int dim) {
                 int newcol = whereami.Item2 + 1;
                 int newrow = whereami.Item1;
                 char newfacing = facing;
-                int toface = facegrid[newrow][newcol]; ;
+                int toface = -1;
                 if (newcol > rightextent)
                 {
                     (int newface, char newside, char[] turns) = faceauxs[(face, facing)]; // this tells us what face we're going to but not where.
@@ -144,12 +144,16 @@ void Part2Hard(string[] lines, int dim) {
                     int rowdiff = whereami.Item1 - toprow;
                     int coldiff = whereami.Item2 - topcol;
                     (int toprownew, int topcolnew) = panels[newface];
-                    if (newside == 'U') { newcol = (topcolnew + dim) - coldiff; newrow = toprownew; }
-                    if (newside == 'L') { newcol = topcolnew + coldiff; newrow = toprownew; }
-                    if (newside == 'R') { newcol = topcolnew; newrow = (topcolnew + dim) - rowdiff; }
-                    if (newside == 'D') { newrow = toprownew + dim; newcol = topcolnew + rowdiff;  }
-                    newfacing = ApplyTransforms(facing, turns);
+                    if (newside == 'U') { newcol = (topcolnew + dimsum) - rowdiff; newrow = toprownew; newfacing = 'D'; }
+                    if (newside == 'L') { newcol = topcolnew; newrow = toprownew + rowdiff; newfacing = 'R'; }
+                    if (newside == 'R') { newcol = topcolnew + dimsum; newrow = (toprownew + dimsum) - rowdiff; newfacing = 'L'; }
+                    if (newside == 'D') { newrow = toprownew + dimsum; newcol = topcolnew + rowdiff; newfacing = 'U'; }
+                    //newfacing = ApplyTransforms(facing, turns);
                     toface = newface;
+                }
+                else
+                {
+                    toface = facegrid[newrow][newcol]; ;
                 }
                 if (grid[newrow][newcol] == '#')
                     break; // go no further.
@@ -159,12 +163,12 @@ void Part2Hard(string[] lines, int dim) {
                 (topextent, bottomextent) = verticalExtents[whereami.Item2];
                 (leftextent, rightextent) = horizontalExtents[whereami.Item1];
             }
-            if (facing == 'L')
+            else if (facing == 'L')
             {
                 int newcol = whereami.Item2 - 1;
                 int newrow = whereami.Item1;
                 char newfacing = facing;
-                int toface = facegrid[newrow][newcol]; ;
+                int toface = -1;
 
                 if (newcol < leftextent)
                 {
@@ -173,12 +177,16 @@ void Part2Hard(string[] lines, int dim) {
                     int rowdiff = whereami.Item1 - toprow;
                     int coldiff = whereami.Item2 - topcol;
                     (int toprownew, int topcolnew) = panels[newface];
-                    if (newside == 'U') { newcol = topcolnew + rowdiff; newrow = toprownew + dim; }
-                    if (newside == 'L') { newcol = topcolnew + dim; newrow = toprownew + rowdiff; }
-                    if (newside == 'R') { newcol = topcolnew + dim; newrow = toprownew + rowdiff; }
-                    if (newside == 'D') { newrow = toprownew + dim; newcol = topcolnew + rowdiff; }
-                    newfacing = ApplyTransforms(facing, turns);
+                    if (newside == 'U') { newcol = topcolnew + rowdiff; newrow = toprownew; newfacing = 'D'; }
+                    if (newside == 'L') { newcol = topcolnew; newrow = (toprownew + dimsum) - rowdiff; newfacing = 'R'; }
+                    if (newside == 'R') { newcol = topcolnew + dimsum; newrow = toprownew + rowdiff; newfacing = 'L'; }
+                    if (newside == 'D') { newrow = (toprownew + dimsum) - rowdiff; newcol = topcolnew + dimsum; newfacing = 'U'; }
+                    //newfacing = ApplyTransforms(facing, turns);
                     toface = newface;
+                }
+                else
+                {
+                    toface = facegrid[newrow][newcol]; ;
                 }
                 if (grid[newrow][newcol] == '#')
                     break; // go no further.
@@ -188,12 +196,12 @@ void Part2Hard(string[] lines, int dim) {
                 (topextent, bottomextent) = verticalExtents[whereami.Item2];
                 (leftextent, rightextent) = horizontalExtents[whereami.Item1];
             }
-            if (facing == 'U')
+            else if (facing == 'U')
             {
                 int newcol = whereami.Item2;
                 int newrow = whereami.Item1 - 1;
                 char newfacing = facing;
-                int toface = facegrid[newrow][newcol]; ;
+                int toface = -1;
 
                 if (newrow < topextent)
                 {
@@ -202,12 +210,16 @@ void Part2Hard(string[] lines, int dim) {
                     int rowdiff = whereami.Item1 - toprow;
                     int coldiff = whereami.Item2 - topcol;
                     (int toprownew, int topcolnew) = panels[newface];
-                    if (newside == 'U') { newcol = (topcolnew + dim) - coldiff; newrow = toprownew; }
-                    if (newside == 'L') { newcol = topcolnew; newrow = toprownew + coldiff; }
-                    if (newside == 'R') { newcol = topcolnew + dim; newrow = (toprownew + dim) - coldiff; }
-                    if (newside == 'D') { newrow = toprownew + dim; newcol = topcolnew + coldiff; }
-                    newfacing = ApplyTransforms(facing, turns);
+                    if (newside == 'U') { newcol = (topcolnew + dimsum) - coldiff; newrow = toprownew; newfacing = 'D'; }
+                    if (newside == 'L') { newcol = topcolnew; newrow = toprownew + coldiff; newfacing = 'R'; }
+                    if (newside == 'R') { newcol = topcolnew + dimsum; newrow = (toprownew + dimsum) - coldiff; newfacing = 'L'; }
+                    if (newside == 'D') { newrow = toprownew + dimsum; newcol = topcolnew + coldiff; newfacing = 'U'; }
+                    //newfacing = ApplyTransforms(facing, turns);
                     toface = newface;
+                }
+                else
+                {
+                    toface = facegrid[newrow][newcol]; ;
                 }
                 if (grid[newrow][newcol] == '#')
                     break; // go no further.
@@ -217,12 +229,12 @@ void Part2Hard(string[] lines, int dim) {
                 (topextent, bottomextent) = verticalExtents[whereami.Item2];
                 (leftextent, rightextent) = horizontalExtents[whereami.Item1];
             }
-            if (facing == 'D')
+            else if (facing == 'D')
             {
                 int newcol = whereami.Item2;
                 int newrow = whereami.Item1 + 1;
                 char newfacing = facing;
-                int toface = facegrid[newrow][newcol]; ;
+                int toface = -1;
 
                 if (newrow > bottomextent)
                 {
@@ -231,20 +243,29 @@ void Part2Hard(string[] lines, int dim) {
                     int rowdiff = whereami.Item1 - toprow;
                     int coldiff = whereami.Item2 - topcol;
                     (int toprownew, int topcolnew) = panels[newface];
-                    if (newside == 'U') { newcol = topcolnew + coldiff; newrow = toprownew; }
-                    if (newside == 'L') { newcol = topcolnew; newrow = (toprownew + dim) - coldiff; }
-                    if (newside == 'R') { newcol = topcolnew + dim; newrow = toprownew + coldiff; }
-                    if (newside == 'D') { newrow = toprownew + dim; newcol = (topcolnew + dim) - coldiff; }
-                    newfacing = ApplyTransforms(facing, turns);
+                    if (newside == 'U') { newcol = topcolnew + coldiff; newrow = toprownew; newfacing = 'D'; }
+                    if (newside == 'L') { newcol = topcolnew; newrow = (toprownew + dimsum) - coldiff; newfacing = 'R'; }
+                    if (newside == 'R') { newcol = topcolnew + dimsum; newrow = toprownew + coldiff; newfacing = 'L'; }
+                    if (newside == 'D') { newrow = toprownew + dimsum; newcol = (topcolnew + dimsum) - coldiff; newfacing = 'U'; }
+                    //newfacing = ApplyTransforms(facing, turns);
                     toface = newface;
                 }
+                else
+                {
+                    toface = facegrid[newrow][newcol]; ;
+                }
+
                 if (grid[newrow][newcol] == '#')
                     break; // go no further.
                 whereami = (newrow, newcol);
                 facing = newfacing;
                 face = toface;
                 (topextent, bottomextent) = verticalExtents[whereami.Item2];
-                (leftextent, rightextent) = horizontalExtents[whereami.Item1]; 
+                (leftextent, rightextent) = horizontalExtents[whereami.Item1];
+            }
+            else
+            {
+                throw new Exception("We don't know what to do!");
             }
         }
 
