@@ -31,9 +31,14 @@ Console.WriteLine($"BSUm is {new String(btotal)} or {CharsToVal(lookup, new stri
 
 Console.WriteLine($"Order of {Math.Log(total, 5)}");
 
+//
+// Takes two of our 'numbers', as character arrays, and adds them together.
+//
 char[] Addition(char[] a, char[] b)
 {
     char rem = '0';
+    // This over estimates the number of characters in the solution, but it just means
+    // you end up with lots of leading 0s which isn't a big problem.
     int len = a.Length > b.Length ? a.Length : b.Length;
     len += 1;
     char[] result = new char[len];
@@ -42,6 +47,9 @@ char[] Addition(char[] a, char[] b)
         result[j] = '0';
     }
 
+    // Go through the digits of each number, from right to left, adding them together.
+    // Once the shortest number is done, we simply copy the digits of the other number
+    // after dealing with the remainder.
     int i;
     for (i = 0; i < len; i++)
     {
@@ -73,10 +81,14 @@ char[] Addition(char[] a, char[] b)
         }
         else
         {
+            // Add the rem from the last digits to one of the new digits.
+            // Of course, that will give a remainder, potentially.
             char subrem;
             char sub = AddDigits(rem, a[a.Length - (1 + i)], out subrem);
-           
+            // Add the result of that sum to the second actual digit.
             result[charind] = AddDigits(sub, b[b.Length-(1+i)], out rem);
+            // Add the two remainders together.  This can't be bigger than the
+            // next 'size up' so we can ignore the remainder here.
             if (subrem != '0')
             {
                 rem = AddDigits(subrem, rem, out subrem);
