@@ -35,7 +35,8 @@ Dictionary<int, List<(int, int, int)>> clockToBlizzards = CalcClockToBlizzards(b
 
 targets.Add((rows, cols - 1));
 
-Part1(moves, targets, rows, cols, LCM, clockToBlizzards);
+//Part1(moves, targets, rows, cols, LCM, clockToBlizzards);
+Part2(moves, rows, cols, LCM, clockToBlizzards);
 
 
 // Nicked from Stack Overflow - why is this not in Math?
@@ -161,6 +162,66 @@ static void Part1(HashSet<(int, int)> moves, HashSet<(int, int)> targets, int ro
                 seen.Add((nr, nc, remainder(time, LCM)));
                 Console.WriteLine($"We are not failing at {nr} {nc} {time}");
                 states.Enqueue((nr, nc, time));
+            }
+
+        }
+    }
+}
+
+static void Part2(HashSet<(int, int)> moves, int rows, int cols, int LCM, Dictionary<int, List<(int, int, int)>> clockToBlizzards)
+{
+    (int, int)[] targets = new (int, int)[] { (rows,cols-1),(-1,0),(rows,cols-1) };
+    int nextTarget = 0;
+
+    HashSet<(int, int, int)> seen = new();
+    Queue<(int, int, int)> states = new();
+    states.Enqueue((-1, 0, 0));
+
+    while (states.Count > 0)
+    {
+        (int cr, int cc, int time) = states.Dequeue();
+        time++;
+        int blizzardtime = time % LCM;
+        var ourblizzards = clockToBlizzards[blizzardtime];
+        foreach ((int dr, int dc) in moves)
+        {
+            int nr = cr + dr;
+            int nc = cc + dc;
+            if ((nr,nc) == targets[nextTarget])
+            {
+                Console.WriteLine($"Completed target {nextTarget} in {time}");
+                nextTarget++;
+                if (nextTarget >= targets.Length)
+                    return; // just quit.
+                while (states.Count > 0)
+                    states.Dequeue();
+                states.Enqueue((nr, nc, time));
+                break;
+            }
+            if ((nr < 0 || nr >= rows || nc < 0 || nc >= cols) && !(targets.Contains((nr, nc))))
+                continue;
+            //Console.WriteLine($"Checking {nr} {nc2} time {time}");
+            
+            bool Fail = false;
+            if (!targets.Contains((nr, nc)))
+            {
+                foreach (int type in (new int[] { 0, 1, 2, 3 }))
+                {
+                    if (ourblizzards.Contains((type, nr, nc)))
+                    {
+                        Fail = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!Fail)
+            {
+                if (seen.Contains((nr, nc, remainder(time, LCM))))
+                    continue;
+                seen.Add((nr, nc, remainder(time, LCM)));
+                states.Enqueue((nr, nc, time));
+                Console.WriteLine($"We are not failing at {nr} {nc} {time} {states.Count}");
             }
 
         }
